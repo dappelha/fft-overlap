@@ -1,4 +1,4 @@
-comp=xlf
+comp=pgi
 
 ifeq '${comp}' 'pgi'
 	# PGI compiler
@@ -22,12 +22,14 @@ endif
 
 
 
-build: driver.o nvtx_mod.o
-	${F90} -o ${comp}test driver.o nvtx_mod.o ${F90FLAGS} ${CUDAFLAGS} ${LINKFLAGS}
+build: driver.o nvtx_mod.o overlapfft_mod.o
+	${F90} -o ${comp}test driver.o overlapfft_mod.o nvtx_mod.o ${F90FLAGS} ${CUDAFLAGS} ${LINKFLAGS}
 
-
-driver.o: driver.F90 nvtx_mod.o
+driver.o: driver.F90 nvtx_mod.o overlapfft_mod.o
 	${F90} -c -o driver.o driver.F90 ${F90FLAGS} ${CUDAFLAGS}
+
+overlapfft_mod.o: overlapfft_mod.F90 nvtx_mod.o
+	${F90} -c -o overlapfft_mod.o overlapfft_mod.F90 ${F90FLAGS} ${CUDAFLAGS}
 
 nvtx_mod.o: nvtx_mod.F90
 	${F90} -c -o nvtx_mod.o nvtx_mod.F90 ${F90FLAGS} ${CUDAFLAGS}
