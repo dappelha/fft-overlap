@@ -1,0 +1,13 @@
+*.out
+*.err
+*.o
+*.a
+*.d
+*.mod
+*.job
+slurm*
+*~
+dump.out
+*.so
+xlftest
+pgitest
