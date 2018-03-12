@@ -46,21 +46,24 @@ interface nvtxRangeStart
    function nvtxRangeStartA(name) bind(C, name='nvtxRangeStartA')
      use iso_c_binding
      character(kind=C_CHAR) :: name(256)
-     integer(C_INT64_T), value :: nvtxRangeStartA
+     !integer(C_INT64_T), value :: nvtxRangeStartA ! value is ignored anway?
+     integer(C_INT64_T) :: nvtxRangeStartA
    end function nvtxRangeStartA
 
    function nvtxRangeStartEx(event) bind(C, name='nvtxRangeStartEx')
      use iso_c_binding
      import:: nvtxEventAttributes
      type(nvtxEventAttributes):: event
-     integer(C_INT64_T), value :: nvtxRangeStartEx
+     !integer(C_INT64_T), value :: nvtxRangeStartEx
+     integer(C_INT64_T) :: nvtxRangeStartEx
    end function nvtxRangeStartEx
 end interface
 
 interface nvtxRangeEnd
    subroutine nvtxRangeEnd(id) bind(C, name='nvtxRangeEnd')
      use iso_c_binding
-     integer(C_INT64_T),value :: id
+     integer(C_INT64_T),value :: id ! it is important that this be by value.
+     ! c uses unsigned 64 bit int...should work as long as passed by value.
    end subroutine nvtxRangeEnd
 end interface
 

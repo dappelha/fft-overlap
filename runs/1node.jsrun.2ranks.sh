@@ -17,7 +17,7 @@ echo "ranks_per_socket = $ranks_per_socket"
 echo "cores_per_rank = $cores_per_rank"
 echo "used cores per socket = $cores_per_socket"
 
-let transfersize=2*1024
+let problemsize=512
 #--------------------------------------
 cat >batch.job <<EOF
 #BSUB -o %J.out
@@ -44,7 +44,7 @@ echo "ranks_per_socket = $ranks_per_socket"
 echo "cores_per_rank = $cores_per_rank"
 echo "used cores per socket = $cores_per_socket"
 
-export PROFILE_RANK=0  #rank where device-bind will run nvprof
+export PROFILE_RANK=-1  #rank where device-bind will run nvprof
 export PROFILE_PATH=/gpfs/alpinetds/scratch/dappelh/csc275/nvp.prof
 export RANKS_PER_SOCKET=$ranks_per_socket
 export RANKS_PER_GPU=$ranks_per_gpu
@@ -73,7 +73,7 @@ echo "nvprof output at $PROFILE_PATH"
 
   jsrun -e prepended --smpiargs="-mxm" --smpiargs "--mca mpi_restrict_libs none" --nrs ${num_sockets}  --tasks_per_rs ${ranks_per_socket} --cpu_per_rs ${cores_per_socket} \
    --gpu_per_rs ${gpus_per_socket} --bind=proportional-packed:${cores_per_rank} -d plane:${ranks_per_socket}  \
-   ./device-bind.sh ../xlftest
+   ./device-bind.sh ../xlftest $problemsize
 
 
 

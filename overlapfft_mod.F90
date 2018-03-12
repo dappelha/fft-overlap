@@ -261,7 +261,7 @@ subroutine cufft3dTest(a,b,nx,ny,nz,nplanes,numtasks)
      ierr = cudaMemcpyAsync(b(:,:,s), d_b(:,:,current), nx*ny, transfer_stream)
 
      ! need to MPI all to all communicate non-blocking here
-     ! we are finished using a(:,:,z). Can use this to store.
+     ! we are finished using a(:,:,z). Can use this to store. Actually don't know if transfer is finished yet.
      ! we have b(:,:,z). now 
      ! process 0 needs b(:,1:nslabs,z)
      ! process 1 needs b(:,nslabs+1:2*nslabs,z)
@@ -270,7 +270,10 @@ subroutine cufft3dTest(a,b,nx,ny,nz,nplanes,numtasks)
      
      ! will store in a(z,:,1:nslabs) (variables are (z,x,y). last dim corresponds to y, but is number of slabs.)
 
-     ! try my own all to all as n messages 
+
+     ! TODO:I have not ensured the message is ready to be sent yet....
+
+     ! try my own all to all as numtask messages 
      write(str,"(A,I4)") "MPI plane",s
      call nvtxStartRange(str,color=s,id=rangeid(s))
      do p=0, numtasks-1

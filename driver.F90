@@ -16,7 +16,7 @@ program main
   integer :: ierr
   integer :: s
   integer :: numtasks, taskid
-
+  character(len=20) :: arg
   real :: res
 
   call MPI_INIT (ierr)
@@ -24,8 +24,12 @@ program main
   call MPI_COMM_SIZE (MPI_COMM_WORLD,numtasks,ierr)
   call MPI_COMM_RANK (MPI_COMM_WORLD,taskid,ierr)
 
+  call get_command_argument(1, arg)
+  
+  if ( len_trim(arg) == 0) arg="1024" ! default arg to 1024 if no input
+  read(arg,"(I8)") n
+
   ! figure out sizes per mpi rank:
-  n = 2*1024
   nx = n
   ny = n
   nz = n
